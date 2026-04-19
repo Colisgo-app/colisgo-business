@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColisGo Business - Dashboard</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="/colisgo-business/css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+    <script src="/colisgo-business/js/api.js" defer></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="assets/logo.png" alt="ColisGo Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-name">ColisGo</span>
+                        <span class="logo-badge">Business</span>
+                    </div>
+                </div>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-page="dashboard">
+                        <i class="fas fa-th-large"></i>
+                        <span>Tableau de bord</span>
+                    </li>
+                    <li class="nav-item" data-page="livraisons">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Mes Livraisons</span>
+                    </li>
+                    <li class="nav-item" data-page="nouveau">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Créer un Envoi</span>
+                    </li>
+                    <li class="nav-item" data-page="statistiques">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Statistiques</span>
+                    </li>
+                    <li class="nav-item" data-page="facturation">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Facturation</span>
+                    </li>
+                    <li class="nav-item" data-page="transporteurs">
+                        <i class="fas fa-users"></i>
+                        <span>Transporteurs</span>
+                    </li>
+                    <li class="nav-item" data-page="api">
+                        <i class="fas fa-code"></i>
+                        <span>API & Intégrations</span>
+                    </li>
+                    <li class="nav-item" data-page="parametres">
+                        <i class="fas fa-cog"></i>
+                        <span>Paramètres</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="plan-card">
+                    <div class="plan-info">
+                        <span class="plan-label">Plan Pro</span>
+                        <span class="plan-price">49$/mois</span>
+                    </div>
+                    <button class="btn-upgrade">Upgrade</button>
+                </div>
+                <div class="support-link">
+                    <i class="fas fa-headset"></i>
+                        <span>Support Prioritaire</span>
+                </div>
+                <div class="support-link" onclick="logout()" style="color: #EF4444; margin-top: 8px;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Déconnexion</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOP BAR -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="welcome-text">
+                        <h1>Bienvenue, <span class="highlight">ABC Entreprise</span> 👋</h1>
+                        <p>Voici un aperçu de vos livraisons aujourd'hui</p>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Rechercher un colis...">
+                    </div>
+                    <button class="icon-btn" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="icon-btn" title="Messages">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=ABC+Entreprise&background=FF6B35&color=fff" alt="User">
+                        <div class="user-info">
+                            <span class="user-name">ABC Entreprise</span>
+                            <span class="user-role">Admin</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD PAGE -->
+            <div class="page-content" id="page-dashboard">
+                <!-- STATS CARDS -->
+                <section class="stats-grid">
+                    <div class="stat-card stat-primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Colis en Cours</span>
+                            <h3 class="stat-value">24</h3>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> +12% ce mois
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-success">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Colis Livrés</span>
+                            <h3 class="stat-value">72</h3>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> +8% ce mois
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Dépenses Totales</span>
+                            <h3 class="stat-value">1,580$</h3>
+                            <span class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i> -3% ce mois
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-info">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Économies Réalisées</span>
+                            <h3 class="stat-value">24%</h3>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> vs transport classique
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TABLE SECTION -->
+                <section class="table-section">
+                    <div class="section-header">
+                        <div class="tabs">
+                            <button class="tab active" data-filter="all">Tous <span class="count">124</span></button>
+                            <button class="tab" data-filter="en-attente">En Attente <span class="count">8</span></button>
+                            <button class="tab" data-filter="en-cours">En Cours <span class="count">24</span></button>
+                            <button class="tab" data-filter="livre">Livrés <span class="count">72</span></button>
+                            <button class="tab" data-filter="annule">Annulés <span class="count">4</span></button>
+                        </div>
+                        <button class="btn-primary" id="newShipmentBtn">
+                            <i class="fas fa-plus"></i> Nouvel Envoi
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>Tracking</th>
+                                    <th>Expéditeur</th>
+                                    <th>Destinataire</th>
+                                    <th>Statut</th>
+                                    <th>Transporteur</th>
+                                    <th>Tarif</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shipmentsTableBody">
+                                <!-- Rempli par JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- BOTTOM GRID -->
+                <section class="bottom-grid">
+                    <!-- Envois Rapides -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bolt"></i> Envois Rapides</h3>
+                            <a href="#" class="link">Gérer</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-shipment">
+                                <div class="quick-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="quick-info">
+                                    <strong>Entrepôt <i class="fas fa-arrow-right"></i> Montréal</strong>
+                                    <span>Utilisé 45 fois ce mois</span>
+                                </div>
+                                <button class="btn-secondary">
+                                    Envoyer <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                            <div class="quick-shipment">
+                                <div class="quick-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="quick-info">
+                                    <strong>Entrepôt <i class="fas fa-arrow-right"></i> Québec</strong>
+                                    <span>Utilisé 28 fois ce mois</span>
+                                </div>
+                                <button class="btn-secondary">
+                                    Envoyer <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                            <div class="quick-shipment">
+                                <div class="quick-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="quick-info">
+                                    <strong>Entrepôt <i class="fas fa-arrow-right"></i> Laval</strong>
+                                    <span>Utilisé 15 fois ce mois</span>
+                                </div>
+                                <button class="btn-secondary">
+                                    Envoyer <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques Chart -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> Statistiques du Mois</h3>
+                            <select class="select-sm">
+                                <option>7 derniers jours</option>
+                                <option>30 derniers jours</option>
+                                <option>3 derniers mois</option>
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-stats">
+                                <div class="chart-stat">
+                                    <span class="chart-value">72</span>
+                                    <span class="chart-label">Colis Livrés</span>
+                                </div>
+                                <div class="chart-stat">
+                                    <span class="chart-value">1,580$</span>
+                                    <span class="chart-label">Dépensés</span>
+                                </div>
+                                <div class="chart-stat">
+                                    <span class="chart-value text-success">24%</span>
+                                    <span class="chart-label">Économies</span>
+                                </div>
+                            </div>
+                            <canvas id="statsChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IMPORT MASSE -->
+                <section class="import-section">
+                    <div class="card">
+                        <div class="import-content">
+                            <div class="import-info">
+                                <div class="import-icon">
+                                    <i class="fas fa-file-csv"></i>
+                                </div>
+                                <div>
+                                    <h3>Importation en Masse</h3>
+                                    <p>Importez plusieurs commandes en une seule fois via un fichier CSV</p>
+                                </div>
+                            </div>
+                            <div class="import-actions">
+                                <button class="btn-outline">
+                                    <i class="fas fa-download"></i> Télécharger le Modèle CSV
+                                </button>
+                                <button class="btn-primary">
+                                    <i class="fas fa-upload"></i> Importer un Fichier
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- AUTRES PAGES (masquées par défaut) -->
+            <div class="page-content hidden" id="page-livraisons">
+                <h2>Mes Livraisons</h2>
+                <p>Page complète de gestion des livraisons...</p>
+            </div>
+
+            <div class="page-content hidden" id="page-nouveau">
+    <div class="create-shipment-page">
+        <!-- HERO SECTION -->
+        <div class="create-hero">
+            <div class="create-hero-content">
+                <div class="create-hero-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <h2>Créer un nouvel envoi</h2>
+                <p>Publiez votre annonce et laissez les voyageurs en déplacement livrer vos colis</p>
+                <button class="btn-primary btn-hero" onclick="openShipmentModal()">
+                    <i class="fas fa-plus"></i> Nouvel Envoi
+                </button>
+            </div>
+            <div class="create-hero-visual">
+                <div class="floating-box box-1">📦</div>
+                <div class="floating-box box-2">📨</div>
+                <div class="floating-box box-3">🚀</div>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions-grid">
+            <div class="quick-action-card" onclick="openShipmentModal()">
+                <div class="qa-icon bg-orange">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Envoi unique</h3>
+                <p>Créer une seule annonce étape par étape</p>
+                <span class="qa-link">Commencer <i class="fas fa-arrow-right"></i></span>
+            </div>
+
+            <div class="quick-action-card">
+                <div class="qa-icon bg-blue">
+                    <i class="fas fa-file-csv"></i>
+                </div>
+                <h3>Import en masse</h3>
+                <p>Importer plusieurs envois via un fichier CSV</p>
+                <span class="qa-link">Importer CSV <i class="fas fa-arrow-right"></i></span>
+            </div>
+
+            <div class="quick-action-card">
+                <div class="qa-icon bg-green">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Envoi rapide</h3>
+                <p>Utiliser un modèle sauvegardé</p>
+                <span class="qa-link">Voir modèles <i class="fas fa-arrow-right"></i></span>
+            </div>
+
+            <div class="quick-action-card">
+                <div class="qa-icon bg-purple">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>Via API</h3>
+                <p>Intégrer avec votre système</p>
+                <span class="qa-link">Documentation <i class="fas fa-arrow-right"></i></span>
+            </div>
+        </div>
+
+        <!-- STATS RAPIDES -->
+        <div class="create-stats-row">
+            <div class="create-stat">
+                <span class="stat-big">24</span>
+                <span class="stat-label-sm">Envois en cours</span>
+            </div>
+            <div class="create-stat-divider"></div>
+            <div class="create-stat">
+                <span class="stat-big">8</span>
+                <span class="stat-label-sm">En attente de voyageur</span>
+            </div>
+            <div class="create-stat-divider"></div>
+            <div class="create-stat">
+                <span class="stat-big">2.5h</span>
+                <span class="stat-label-sm">Délai moyen d'acceptation</span>
+            </div>
+            <div class="create-stat-divider"></div>
+            <div class="create-stat">
+                <span class="stat-big">98%</span>
+                <span class="stat-label-sm">Taux de livraison</span>
+            </div>
+        </div>
+
+        <!-- ENVOIS EN ATTENTE DE PHOTOS -->
+        <div class="pending-photos-section">
+            <div class="section-title-row">
+                <h3><i class="fas fa-camera"></i> Envois en attente de photos</h3>
+                <a href="#" class="link" onclick="switchToPage('livraisons')">Voir tout <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="pending-cards" id="pendingPhotosCards">
+                <!-- Rempli par JS -->
+            </div>
+        </div>
+
+        <!-- CONSEILS -->
+        <div class="tips-section">
+            <div class="tip-card">
+                <div class="tip-icon">💡</div>
+                <div class="tip-content">
+                    <h4>Conseil du jour</h4>
+                    <p>Les annonces avec 4 photos ou plus reçoivent <strong>3x plus d'acceptations</strong> de voyageurs ! Prenez le temps d'ajouter des photos claires.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">⚡</div>
+                <div class="tip-content">
+                    <h4>Saviez-vous ?</h4>
+                    <p>En boostant votre annonce, elle apparaît en <strong>première position</strong> et vous recevez 60% d'acceptations en moins de 30 minutes.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">🎯</div>
+                <div class="tip-content">
+                    <h4>Astuce Pro</h4>
+                    <p>Créez des <strong>modèles d'envois rapides</strong> pour vos trajets fréquents et gagnez du temps à chaque nouvel envoi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="page-content hidden" id="page-statistiques">
+    <div class="page-header">
+        <div>
+            <h2>Statistiques détaillées</h2>
+            <p class="page-subtitle">Analysez vos performances et optimisez vos livraisons</p>
+        </div>
+        <div class="header-actions">
+            <select class="select-sm">
+                <option>30 derniers jours</option>
+                <option>3 derniers mois</option>
+                <option>6 derniers mois</option>
+                <option>Cette année</option>
+            </select>
+            <button class="btn-outline">
+                <i class="fas fa-download"></i> Exporter
+            </button>
+        </div>
+    </div>
+
+    <!-- KPIS PRINCIPAUX -->
+    <div class="stats-grid">
+        <div class="stat-card stat-primary">
+            <div class="stat-icon"><i class="fas fa-box"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Total envois</span>
+                <h3 class="stat-value">142</h3>
+                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> +18% vs mois dernier</span>
+            </div>
+        </div>
+        <div class="stat-card stat-success">
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Taux de livraison</span>
+                <h3 class="stat-value">98.5%</h3>
+                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> +2% ce mois</span>
+            </div>
+        </div>
+        <div class="stat-card stat-warning">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Délai moyen</span>
+                <h3 class="stat-value">1.8j</h3>
+                <span class="stat-change positive"><i class="fas fa-arrow-down"></i> -0.3j plus rapide</span>
+            </div>
+        </div>
+        <div class="stat-card stat-info">
+            <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Coût moyen</span>
+                <h3 class="stat-value">17.50$</h3>
+                <span class="stat-change positive"><i class="fas fa-arrow-down"></i> -12% d'économies</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAPHIQUES PRINCIPAUX -->
+    <div class="charts-row">
+        <div class="card chart-card-large">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-area"></i> Évolution des envois</h3>
+                <div class="chart-legend">
+                    <span class="legend-item"><span class="dot bg-orange"></span> Envois créés</span>
+                    <span class="legend-item"><span class="dot bg-green"></span> Livrés</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="evolutionChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+
+        <div class="card chart-card-small">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-pie"></i> Répartition</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="pieChart" style="max-height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP DESTINATIONS -->
+    <div class="stats-dual-row">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-map-marked-alt"></i> Top destinations</h3>
+            </div>
+            <div class="card-body">
+                <div class="top-list">
+                    <div class="top-item">
+                        <div class="top-rank">1</div>
+                        <div class="top-info">
+                            <strong>Montréal → Québec</strong>
+                            <span>45 envois</span>
+                        </div>
+                        <div class="top-bar-wrapper">
+                            <div class="top-bar" style="width: 90%;"></div>
+                        </div>
+                        <span class="top-percent">31%</span>
+                    </div>
+                    <div class="top-item">
+                        <div class="top-rank">2</div>
+                        <div class="top-info">
+                            <strong>Laval → Québec</strong>
+                            <span>32 envois</span>
+                        </div>
+                        <div class="top-bar-wrapper">
+                            <div class="top-bar" style="width: 64%;"></div>
+                        </div>
+                        <span class="top-percent">22%</span>
+                    </div>
+                    <div class="top-item">
+                        <div class="top-rank">3</div>
+                        <div class="top-info">
+                            <strong>Montréal → Sherbrooke</strong>
+                            <span>28 envois</span>
+                        </div>
+                        <div class="top-bar-wrapper">
+                            <div class="top-bar" style="width: 56%;"></div>
+                        </div>
+                        <span class="top-percent">19%</span>
+                    </div>
+                    <div class="top-item">
+                        <div class="top-rank">4</div>
+                        <div class="top-info">
+                            <strong>Trois-Rivières → Montréal</strong>
+                            <span>22 envois</span>
+                        </div>
+                        <div class="top-bar-wrapper">
+                            <div class="top-bar" style="width: 44%;"></div>
+                        </div>
+                        <span class="top-percent">15%</span>
+                    </div>
+                    <div class="top-item">
+                        <div class="top-rank">5</div>
+                        <div class="top-info">
+                            <strong>Gatineau → Québec</strong>
+                            <span>15 envois</span>
+                        </div>
+                        <div class="top-bar-wrapper">
+                            <div class="top-bar" style="width: 30%;"></div>
+                        </div>
+                        <span class="top-percent">13%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-star"></i> Top transporteurs</h3>
+            </div>
+            <div class="card-body">
+                <div class="top-transporters">
+                    <div class="transporter-rank">
+                        <div class="transporter-avatar-big">
+                            <img src="https://ui-avatars.com/api/?name=Sophie+T&background=FF6B35&color=fff" alt="">
+                            <span class="rank-badge gold">🥇</span>
+                        </div>
+                        <strong>Sophie T.</strong>
+                        <span>42 livraisons</span>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.9
+                        </div>
+                    </div>
+                    <div class="transporter-rank">
+                        <div class="transporter-avatar-big">
+                            <img src="https://ui-avatars.com/api/?name=Marc+D&background=10B981&color=fff" alt="">
+                            <span class="rank-badge silver">🥈</span>
+                        </div>
+                        <strong>Marc D.</strong>
+                        <span>38 livraisons</span>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.8
+                        </div>
+                    </div>
+                    <div class="transporter-rank">
+                        <div class="transporter-avatar-big">
+                            <img src="https://ui-avatars.com/api/?name=Alex+R&background=3B82F6&color=fff" alt="">
+                            <span class="rank-badge bronze">🥉</span>
+                        </div>
+                        <strong>Alex R.</strong>
+                        <span>31 livraisons</span>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.7
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERFORMANCES PAR HEURE -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-clock"></i> Performances par heure</h3>
+        </div>
+        <div class="card-body">
+            <canvas id="hourlyChart" style="max-height: 250px;"></canvas>
+        </div>
+    </div>
+</div>
+
+           <div class="page-content hidden" id="page-facturation">
+    <div class="page-header">
+        <div>
+            <h2>Facturation</h2>
+            <p class="page-subtitle">Gérez vos factures, paiements et abonnement</p>
+        </div>
+        <button class="btn-primary">
+            <i class="fas fa-download"></i> Télécharger toutes les factures
+        </button>
+    </div>
+
+    <!-- PLAN ACTUEL -->
+    <div class="current-plan-card">
+        <div class="plan-info-section">
+            <span class="plan-tag">Plan actuel</span>
+            <h3>Plan Pro</h3>
+            <div class="plan-features">
+                <span><i class="fas fa-check"></i> 200 colis/mois</span>
+                <span><i class="fas fa-check"></i> API d'accès</span>
+                <span><i class="fas fa-check"></i> Support prioritaire</span>
+                <span><i class="fas fa-check"></i> Import CSV</span>
+            </div>
+        </div>
+        <div class="plan-pricing">
+            <div class="plan-price-big">49$<span>/mois</span></div>
+            <span class="plan-renewal">Renouvellement le 15 février 2025</span>
+            <div class="plan-actions">
+                <button class="btn-outline">Changer de plan</button>
+                <button class="btn-primary">Upgrade Enterprise</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS FACTURATION -->
+    <div class="billing-stats">
+        <div class="billing-stat-card">
+            <div class="billing-stat-icon bg-green">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div>
+                <span class="billing-stat-label">Total dépensé</span>
+                <h3>1,580$</h3>
+                <span class="stat-change positive">Ce mois-ci</span>
+            </div>
+        </div>
+        <div class="billing-stat-card">
+            <div class="billing-stat-icon bg-blue">
+                <i class="fas fa-file-invoice"></i>
+            </div>
+            <div>
+                <span class="billing-stat-label">Factures payées</span>
+                <h3>12</h3>
+                <span class="stat-change positive">Toutes à jour</span>
+            </div>
+        </div>
+        <div class="billing-stat-card">
+            <div class="billing-stat-icon bg-orange">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div>
+                <span class="billing-stat-label">En attente</span>
+                <h3>245$</h3>
+                <span class="stat-change">Échéance dans 5j</span>
+            </div>
+        </div>
+        <div class="billing-stat-card">
+            <div class="billing-stat-icon bg-purple">
+                <i class="fas fa-percentage"></i>
+            </div>
+            <div>
+                <span class="billing-stat-label">Économies</span>
+                <h3>24%</h3>
+                <span class="stat-change positive">vs classique</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODE DE PAIEMENT -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-credit-card"></i> Modes de paiement</h3>
+            <button class="btn-outline btn-sm">
+                <i class="fas fa-plus"></i> Ajouter une carte
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="payment-method-item default">
+                <div class="card-visual visa">
+                    <span class="card-brand">VISA</span>
+                </div>
+                <div class="payment-info">
+                    <strong>Visa se terminant par 4242</strong>
+                    <span>Expire 12/2026</span>
+                </div>
+                <span class="badge badge-success">Par défaut</span>
+                <div class="payment-actions">
+                    <button class="btn-icon" title="Éditer"><i class="fas fa-pen"></i></button>
+                    <button class="btn-icon btn-danger" title="Supprimer"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="payment-method-item">
+                <div class="card-visual mastercard">
+                    <span class="card-brand">MC</span>
+                </div>
+                <div class="payment-info">
+                    <strong>Mastercard se terminant par 8456</strong>
+                    <span>Expire 06/2025</span>
+                </div>
+                <span class="badge badge-gray">Secondaire</span>
+                <div class="payment-actions">
+                    <button class="btn-icon" title="Éditer"><i class="fas fa-pen"></i></button>
+                    <button class="btn-icon btn-danger" title="Supprimer"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORIQUE DES FACTURES -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-history"></i> Historique des factures</h3>
+            <div class="header-actions">
+                <select class="select-sm">
+                    <option>2025</option>
+                    <option>2024</option>
+                </select>
+                <button class="btn-outline btn-sm">
+                    <i class="fas fa-filter"></i> Filtrer
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Facture #</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>#INV-2025-012</strong></td>
+                        <td>15 jan. 2025</td>
+                        <td>Plan Pro + 47 colis</td>
+                        <td><strong>189.50$</strong></td>
+                        <td><span class="status-badge status-livre">Payée</span></td>
+                        <td>
+                            <button class="btn-icon" title="Télécharger"><i class="fas fa-download"></i></button>
+                            <button class="btn-icon" title="Voir"><i class="fas fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>#INV-2025-011</strong></td>
+                        <td>15 déc. 2024</td>
+                        <td>Plan Pro + 62 colis</td>
+                        <td><strong>235.00$</strong></td>
+                        <td><span class="status-badge status-livre">Payée</span></td>
+                        <td>
+                            <button class="btn-icon" title="Télécharger"><i class="fas fa-download"></i></button>
+                            <button class="btn-icon" title="Voir"><i class="fas fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>#INV-2025-010</strong></td>
+                        <td>15 nov. 2024</td>
+                        <td>Plan Pro + 38 colis</td>
+                        <td><strong>165.00$</strong></td>
+                        <td><span class="status-badge status-livre">Payée</span></td>
+                        <td>
+                            <button class="btn-icon" title="Télécharger"><i class="fas fa-download"></i></button>
+                            <button class="btn-icon" title="Voir"><i class="fas fa-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>#INV-2025-013</strong></td>
+                        <td>À venir - 15 fév. 2025</td>
+                        <td>Plan Pro + usage estimé</td>
+                        <td><strong>~ 210.00$</strong></td>
+                        <td><span class="status-badge status-en-cours">En attente</span></td>
+                        <td>
+                            <button class="btn-icon" title="Voir"><i class="fas fa-eye"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRAPHIQUE DÉPENSES -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-chart-line"></i> Évolution des dépenses</h3>
+            <select class="select-sm">
+                <option>6 derniers mois</option>
+                <option>12 derniers mois</option>
+            </select>
+        </div>
+        <div class="card-body">
+            <canvas id="billingChart" style="max-height: 300px;"></canvas>
+        </div>
+    </div>
+</div>
+
+            <div class="page-content hidden" id="page-transporteurs">
+    <div class="page-header">
+        <div>
+            <h2>Transporteurs</h2>
+            <p class="page-subtitle">Gérez vos transporteurs favoris et consultez leurs performances</p>
+        </div>
+        <div class="header-actions">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Rechercher un transporteur...">
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="transporter-tabs">
+        <button class="tab active" data-tab="favorites">
+            <i class="fas fa-heart"></i> Favoris <span class="count">8</span>
+        </button>
+        <button class="tab" data-tab="recent">
+            <i class="fas fa-clock"></i> Récents <span class="count">24</span>
+        </button>
+        <button class="tab" data-tab="blocked">
+            <i class="fas fa-ban"></i> Bloqués <span class="count">2</span>
+        </button>
+    </div>
+
+    <!-- GRILLE TRANSPORTEURS -->
+    <div class="transporters-grid">
+        <div class="transporter-card featured">
+            <span class="featured-badge"><i class="fas fa-crown"></i> Top 1</span>
+            <div class="transporter-header">
+                <img src="https://ui-avatars.com/api/?name=Sophie+T&background=FF6B35&color=fff&size=120" alt="Sophie T.">
+                <div class="transporter-main-info">
+                    <h3>Sophie Tremblay</h3>
+                    <div class="rating-big">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>4.9 (84 avis)</span>
+                    </div>
+                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Vérifié</span>
+                </div>
+            </div>
+            
+            <div class="transporter-stats">
+                <div class="t-stat">
+                    <span class="t-stat-value">42</span>
+                    <span class="t-stat-label">Livraisons</span>
+                </div>
+                <div class="t-stat">
+                    <span class="t-stat-value">98%</span>
+                    <span class="t-stat-label">Succès</span>
+                </div>
+                <div class="t-stat">
+                    <span class="t-stat-value">1.5j</span>
+                    <span class="t-stat-label">Délai moyen</span>
+                </div>
+            </div>
+
+            <div class="transporter-routes">
+                <h4>Trajets favoris :</h4>
+                <div class="route-tags">
+                    <span class="route-tag">Montréal → Québec</span>
+                    <span class="route-tag">Montréal → Laval</span>
+                </div>
+            </div>
+
+            <div class="transporter-actions">
+                <button class="btn-outline btn-sm">
+                    <i class="fas fa-comment"></i> Message
+                </button>
+                <button class="btn-primary btn-sm">
+                    <i class="fas fa-paper-plane"></i> Proposer envoi
+                </button>
+            </div>
+        </div>
+
+        <div class="transporter-card">
+            <div class="transporter-header">
+                <img src="https://ui-avatars.com/api/?name=Marc+D&background=10B981&color=fff&size=120" alt="Marc D.">
+                <div class="transporter-main-info">
+                    <h3>Marc Dubois</h3>
+                    <div class="rating-big">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>4.8 (67 avis)</span>
+                    </div>
+                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Vérifié</span>
+                </div>
+            </div>
+            
+            <div class="transporter-stats">
+                <div class="t-stat">
+                    <span class="t-stat-value">38</span>
+                    <span class="t-stat-label">Livraisons</span>
+                </div>
+                <div class="t-stat">
+                    <span class="t-stat-value">96%</span>
+                    <span class="t-stat-label">Succès</span>
+                </div>
+                <div class="t-stat">
+                    <span class="t-stat-value">1.7j</span>
+                    <span class="t-stat-label">Délai moyen</span>
+                </div>
+            </div>
+
+            <div class="transporter-routes">
+                <h4>Trajets favoris :</h4>
+                <div class="route-tags">
+                    <span class="route-tag">Laval → Québec</span>
+                    <span class="route-tag">Trois-Rivières → MTL</span>
+                </div>
+            </div>
+
+            <div class="transporter-actions">
+                <button class="btn-outline btn-sm">
+                    <i class="fas fa-comment"></i> Message
+                </button>
+                <button class="btn-primary btn-sm">
+                    <i class="fas fa-paper-plane"></i> Proposer envoi
+                </button>
+            </div>
+        </div>
+
+        <div class="transporter-card">
+            <div class="transporter-header">
+                <img src="https://ui-avatars.com/api/?name=Alex+R&background=3B82F6&color=fff&size=120" alt="Alex R.">
+                <div class="transporter-main-info">
+                    <h3>Alex Roy</h3>
+                    <div class="rating-big">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>4.7 (52 avis)</span>
+                    </div>
+                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Vérifié</span>
+                </div>
+            </div>
+            
+            <div class="transporter-stats">
+                <div class="t-stat">
+                    <span class="t-stat-value">31</span>
+                    <span class="t-stat-label">Livraisons</span>
+                </div>
+                <div class="t-stat">
+                    <span class="t-stat-value">94%</span>
+                    <span class="t-stat-label">Succès</span>
+                </div>
+                <div class="t-stat">
+                    <span class="t-stat-value">2.1j</span>
+                    <span class="t-stat-label">Délai moyen</span>
+                </div>
+            </div>
+
+            <div class="transporter-routes">
+                <h4>Trajets favoris :</h4>
+                <div class="route-tags">
+                    <span class="route-tag">Montréal → Sherbrooke</span>
+                </div>
+            </div>
+
+            <div class="transporter-actions">
+                <button class="btn-outline btn-sm">
+                    <i class="fas fa-comment"></i> Message
+                </button>
+                <button class="btn-primary btn-sm">
+                    <i class="fas fa-paper-plane"></i> Proposer envoi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="page-content hidden" id="page-api">
+    <div class="page-header">
+        <div>
+            <h2>API & Intégrations</h2>
+            <p class="page-subtitle">Connectez ColisGo à vos systèmes et automatisez vos livraisons</p>
+        </div>
+        <div class="api-mode-switch">
+            <button class="mode-btn active" data-mode="test">
+                <i class="fas fa-flask"></i> Mode Test
+            </button>
+            <button class="mode-btn" data-mode="live">
+                <i class="fas fa-bolt"></i> Production
+            </button>
+        </div>
+    </div>
+
+    <!-- API KEYS SECTION -->
+    <section class="api-section">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-key"></i> Vos Clés API</h3>
+                <span class="badge badge-warning">
+                    <i class="fas fa-shield-alt"></i> Gardez ces clés confidentielles
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="api-key-item">
+                    <div class="api-key-info">
+                        <label>API Key (Publique)</label>
+                        <span class="api-key-desc">Utilisée pour identifier votre compte</span>
+                    </div>
+                    <div class="api-key-value">
+                        <code id="apiKey">pk_test_ABC123XYZ789colisgo456DEF</code>
+                        <button class="btn-icon" onclick="copyToClipboard('apiKey')" title="Copier">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="api-key-item">
+                    <div class="api-key-info">
+                        <label>Secret Key (Privée)</label>
+                        <span class="api-key-desc">⚠️ Ne partagez JAMAIS cette clé</span>
+                    </div>
+                    <div class="api-key-value">
+                        <code id="secretKey">sk_test_••••••••••••••••••••••••</code>
+                        <button class="btn-icon" onclick="toggleSecret()" title="Afficher">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                        <button class="btn-icon" onclick="copyToClipboard('secretKey')" title="Copier">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="api-actions">
+                    <button class="btn-outline" onclick="regenerateKeys()">
+                        <i class="fas fa-sync-alt"></i> Régénérer les clés
+                    </button>
+                    <button class="btn-outline">
+                        <i class="fas fa-download"></i> Télécharger (.env)
+                    </button>
+                    <span class="last-used">
+                        <i class="fas fa-clock"></i> Dernière utilisation : il y a 2h
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API STATS -->
+    <section class="api-stats">
+        <div class="api-stat-card">
+            <div class="api-stat-icon bg-blue">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div>
+                <span class="api-stat-label">Requêtes ce mois</span>
+                <h3>12,458</h3>
+                <span class="stat-change positive">+18% vs mois dernier</span>
+            </div>
+        </div>
+        <div class="api-stat-card">
+            <div class="api-stat-icon bg-green">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div>
+                <span class="api-stat-label">Taux de succès</span>
+                <h3>99.7%</h3>
+                <span class="stat-change positive">Excellent</span>
+            </div>
+        </div>
+        <div class="api-stat-card">
+            <div class="api-stat-icon bg-orange">
+                <i class="fas fa-tachometer-alt"></i>
+            </div>
+            <div>
+                <span class="api-stat-label">Temps de réponse</span>
+                <h3>142ms</h3>
+                <span class="stat-change positive">Rapide</span>
+            </div>
+        </div>
+        <div class="api-stat-card">
+            <div class="api-stat-icon bg-red">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div>
+                <span class="api-stat-label">Erreurs</span>
+                <h3>37</h3>
+                <span class="stat-change negative">0.3% des requêtes</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTEGRATIONS -->
+    <section class="integrations-section">
+        <div class="section-title-row">
+            <h3><i class="fas fa-plug"></i> Intégrations disponibles</h3>
+            <a href="#" class="link">Voir toutes <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="integrations-grid">
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo bg-shopify">
+                        <i class="fab fa-shopify"></i>
+                    </div>
+                    <span class="badge badge-success">Installé</span>
+                </div>
+                <h4>Shopify</h4>
+                <p>Synchronisez automatiquement vos commandes Shopify avec ColisGo</p>
+                <div class="integration-footer">
+                    <span class="integration-stat">
+                        <i class="fas fa-box"></i> 245 colis synchronisés
+                    </span>
+                    <button class="btn-outline btn-sm">Configurer</button>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo bg-woo">
+                        <i class="fab fa-wordpress"></i>
+                    </div>
+                    <span class="badge badge-gray">Disponible</span>
+                </div>
+                <h4>WooCommerce</h4>
+                <p>Plugin WordPress pour votre boutique WooCommerce</p>
+                <div class="integration-footer">
+                    <span class="integration-stat">
+                        <i class="fas fa-star"></i> 4.8/5 (234 avis)
+                    </span>
+                    <button class="btn-primary btn-sm">Installer</button>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo bg-wix">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <span class="badge badge-gray">Disponible</span>
+                </div>
+                <h4>Wix</h4>
+                <p>Connectez votre site Wix en quelques clics</p>
+                <div class="integration-footer">
+                    <span class="integration-stat">
+                        <i class="fas fa-users"></i> 1,200+ installations
+                    </span>
+                    <button class="btn-primary btn-sm">Installer</button>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo bg-zapier">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <span class="badge badge-gray">Disponible</span>
+                </div>
+                <h4>Zapier</h4>
+                <p>Connectez ColisGo à 5000+ applications</p>
+                <div class="integration-footer">
+                    <span class="integration-stat">
+                        <i class="fas fa-link"></i> 5000+ apps
+                    </span>
+                    <button class="btn-primary btn-sm">Connecter</button>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo bg-square">
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <span class="badge badge-gray">Disponible</span>
+                </div>
+                <h4>Square</h4>
+                <p>Intégration avec Square pour commerçants</p>
+                <div class="integration-footer">
+                    <span class="integration-stat">
+                        <i class="fas fa-store"></i> Pour commerces
+                    </span>
+                    <button class="btn-primary btn-sm">Installer</button>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo bg-custom">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="badge badge-info">Custom</span>
+                </div>
+                <h4>API Personnalisée</h4>
+                <p>Intégrez ColisGo à votre système sur mesure</p>
+                <div class="integration-footer">
+                    <span class="integration-stat">
+                        <i class="fas fa-book"></i> Documentation complète
+                    </span>
+                    <button class="btn-primary btn-sm">Voir docs</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOCUMENTATION -->
+    <section class="docs-section">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-book-open"></i> Documentation API - Démarrage rapide</h3>
+                <a href="#" class="link">Documentation complète <i class="fas fa-external-link-alt"></i></a>
+            </div>
+            <div class="card-body">
+                <div class="code-tabs">
+                    <button class="code-tab active" data-lang="curl">cURL</button>
+                    <button class="code-tab" data-lang="javascript">JavaScript</button>
+                    <button class="code-tab" data-lang="python">Python</button>
+                    <button class="code-tab" data-lang="php">PHP</button>
+                </div>
+
+                <div class="code-examples">
+                    <div class="code-example active" data-lang="curl">
+                        <div class="code-header">
+                            <span><i class="fas fa-terminal"></i> Créer un envoi</span>
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="fas fa-copy"></i> Copier
+                            </button>
+                        </div>
+                        <pre><code>curl -X POST https://api.colisgo.ca/v1/shipments \
+  -H "Authorization: Bearer sk_test_YOUR_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sender": {
+      "name": "ABC Entreprise",
+      "address": "123 Rue Principale, Montréal, QC",
+      "phone": "+15145551234"
+    },
+    "receiver": {
+      "name": "Jean Tremblay",
+      "address": "456 Rue Saint-Jean, Québec, QC",
+      "phone": "+14185555678"
+    },
+    "package": {
+      "weight": 2.5,
+      "type": "standard",
+      "description": "Documents importants"
+    }
+  }'</code></pre>
+                    </div>
+
+                    <div class="code-example" data-lang="javascript">
+                        <div class="code-header">
+                            <span><i class="fab fa-js"></i> Créer un envoi</span>
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="fas fa-copy"></i> Copier
+                            </button>
+                        </div>
+                        <pre><code>const response = await fetch('https://api.colisgo.ca/v1/shipments', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer sk_test_YOUR_SECRET_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    sender: {
+      name: 'ABC Entreprise',
+      address: '123 Rue Principale, Montréal, QC',
+      phone: '+15145551234'
+    },
+    receiver: {
+      name: 'Jean Tremblay',
+      address: '456 Rue Saint-Jean, Québec, QC',
+      phone: '+14185555678'
+    },
+    package: {
+      weight: 2.5,
+      type: 'standard',
+      description: 'Documents importants'
+    }
+  })
+});
+
+const shipment = await response.json();
+console.log('Tracking:', shipment.tracking_number);</code></pre>
+                    </div>
+
+                    <div class="code-example" data-lang="python">
+                        <div class="code-header">
+                            <span><i class="fab fa-python"></i> Créer un envoi</span>
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="fas fa-copy"></i> Copier
+                            </button>
+                        </div>
+                        <pre><code>import requests
+
+response = requests.post(
+    'https://api.colisgo.ca/v1/shipments',
+    headers={
+        'Authorization': 'Bearer sk_test_YOUR_SECRET_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'sender': {
+            'name': 'ABC Entreprise',
+            'address': '123 Rue Principale, Montréal, QC',
+            'phone': '+15145551234'
+        },
+        'receiver': {
+            'name': 'Jean Tremblay',
+            'address': '456 Rue Saint-Jean, Québec, QC',
+            'phone': '+14185555678'
+        },
+        'package': {
+            'weight': 2.5,
+            'type': 'standard',
+            'description': 'Documents importants'
+        }
+    }
+)
+
+shipment = response.json()
+print(f"Tracking: {shipment['tracking_number']}")</code></pre>
+                    </div>
+
+                    <div class="code-example" data-lang="php">
+                        <div class="code-header">
+                            <span><i class="fab fa-php"></i> Créer un envoi</span>
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="fas fa-copy"></i> Copier
+                            </button>
+                        </div>
+                        <pre><code>&lt;?php
+$ch = curl_init('https://api.colisgo.ca/v1/shipments');
+
+$data = [
+    'sender' => [
+        'name' => 'ABC Entreprise',
+        'address' => '123 Rue Principale, Montréal, QC',
+        'phone' => '+15145551234'
+    ],
+    'receiver' => [
+        'name' => 'Jean Tremblay',
+        'address' => '456 Rue Saint-Jean, Québec, QC',
+        'phone' => '+14185555678'
+    ],
+    'package' => [
+        'weight' => 2.5,
+        'type' => 'standard',
+        'description' => 'Documents importants'
+    ]
+];
+
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => json_encode($data),
+    CURLOPT_HTTPHEADER => [
+        'Authorization: Bearer sk_test_YOUR_SECRET_KEY',
+        'Content-Type: application/json'
+    ]
+]);
+
+$response = curl_exec($ch);
+$shipment = json_decode($response, true);
+echo "Tracking: " . $shipment['tracking_number'];</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WEBHOOKS -->
+    <section class="webhooks-section">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-broadcast-tower"></i> Webhooks</h3>
+                <button class="btn-primary btn-sm" onclick="addWebhook()">
+                    <i class="fas fa-plus"></i> Ajouter un webhook
+                </button>
+            </div>
+            <div class="card-body">
+                <p class="section-desc">
+                    Recevez des notifications en temps réel sur votre serveur lorsque des événements se produisent.
+                </p>
+
+                <div class="webhook-item">
+                    <div class="webhook-status">
+                        <span class="status-dot active"></span>
+                    </div>
+                    <div class="webhook-info">
+                        <div class="webhook-url">https://monsite.com/api/colisgo-webhook</div>
+                        <div class="webhook-events">
+                            <span class="event-tag">shipment.created</span>
+                            <span class="event-tag">shipment.delivered</span>
+                            <span class="event-tag">shipment.cancelled</span>
+                        </div>
+                    </div>
+                    <div class="webhook-meta">
+                        <span class="webhook-stat">
+                            <i class="fas fa-check"></i> 1,234 envoyés
+                        </span>
+                        <span class="webhook-stat">
+                            <i class="fas fa-clock"></i> Il y a 5 min
+                        </span>
+                    </div>
+                    <div class="webhook-actions">
+                        <button class="btn-icon" title="Tester">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="btn-icon" title="Modifier">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn-icon btn-danger" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="webhook-item">
+                    <div class="webhook-status">
+                        <span class="status-dot active"></span>
+                    </div>
+                    <div class="webhook-info">
+                        <div class="webhook-url">https://crm.monsite.com/colisgo-sync</div>
+                        <div class="webhook-events">
+                            <span class="event-tag">shipment.delivered</span>
+                            <span class="event-tag">shipment.status_changed</span>
+                        </div>
+                    </div>
+                    <div class="webhook-meta">
+                        <span class="webhook-stat">
+                            <i class="fas fa-check"></i> 856 envoyés
+                        </span>
+                        <span class="webhook-stat">
+                            <i class="fas fa-clock"></i> Il y a 1h
+                        </span>
+                    </div>
+                    <div class="webhook-actions">
+                        <button class="btn-icon" title="Tester">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <button class="btn-icon" title="Modifier">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="btn-icon btn-danger" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="available-events">
+                    <h4>Événements disponibles :</h4>
+                    <div class="events-list">
+                        <div class="event-item">
+                            <code>shipment.created</code>
+                            <span>Un nouvel envoi a été créé</span>
+                        </div>
+                        <div class="event-item">
+                            <code>shipment.assigned</code>
+                            <span>Un transporteur a été assigné</span>
+                        </div>
+                        <div class="event-item">
+                            <code>shipment.picked_up</code>
+                            <span>Le colis a été ramassé</span>
+                        </div>
+                        <div class="event-item">
+                            <code>shipment.in_transit</code>
+                            <span>Le colis est en transit</span>
+                        </div>
+                        <div class="event-item">
+                            <code>shipment.delivered</code>
+                            <span>Le colis a été livré</span>
+                        </div>
+                        <div class="event-item">
+                            <code>shipment.cancelled</code>
+                            <span>L'envoi a été annulé</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOGS -->
+    <section class="logs-section">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-list-alt"></i> Logs API récents</h3>
+                <div class="header-actions">
+                    <select class="select-sm">
+                        <option>Tous les statuts</option>
+                        <option>Succès (200)</option>
+                        <option>Erreurs (4xx)</option>
+                        <option>Erreurs serveur (5xx)</option>
+                    </select>
+                    <button class="btn-outline btn-sm">
+                        <i class="fas fa-download"></i> Exporter
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="logs-table">
+                    <div class="log-item">
+                        <span class="log-status success">200</span>
+                        <span class="log-method post">POST</span>
+                        <span class="log-endpoint">/v1/shipments</span>
+                        <span class="log-time">14:32:15</span>
+                        <span class="log-duration">142ms</span>
+                        <button class="btn-icon btn-sm"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-status success">200</span>
+                        <span class="log-method get">GET</span>
+                        <span class="log-endpoint">/v1/shipments/CG12345</span>
+                        <span class="log-time">14:31:48</span>
+                        <span class="log-duration">89ms</span>
+                        <button class="btn-icon btn-sm"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-status error">404</span>
+                        <span class="log-method get">GET</span>
+                        <span class="log-endpoint">/v1/shipments/INVALID</span>
+                        <span class="log-time">14:28:12</span>
+                        <span class="log-duration">45ms</span>
+                        <button class="btn-icon btn-sm"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-status success">201</span>
+                        <span class="log-method post">POST</span>
+                        <span class="log-endpoint">/v1/shipments</span>
+                        <span class="log-time">14:15:33</span>
+                        <span class="log-duration">178ms</span>
+                        <button class="btn-icon btn-sm"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="log-item">
+                        <span class="log-status success">200</span>
+                        <span class="log-method get">GET</span>
+                        <span class="log-endpoint">/v1/shipments</span>
+                        <span class="log-time">14:10:02</span>
+                        <span class="log-duration">112ms</span>
+                        <button class="btn-icon btn-sm"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="view-all-logs">
+                    <a href="#" class="link">Voir tous les logs <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+            <div class="page-content hidden" id="page-parametres">
+    <div class="page-header">
+        <div>
+            <h2>Paramètres</h2>
+            <p class="page-subtitle">Gérez votre compte, votre entreprise et vos préférences</p>
+        </div>
+    </div>
+
+    <div class="settings-layout">
+        <!-- MENU LATÉRAL PARAMÈTRES -->
+        <div class="settings-menu">
+            <div class="settings-menu-item active" data-section="company">
+                <i class="fas fa-building"></i> Entreprise
+            </div>
+            <div class="settings-menu-item" data-section="profile">
+                <i class="fas fa-user-circle"></i> Profil
+            </div>
+            <div class="settings-menu-item" data-section="team">
+                <i class="fas fa-users"></i> Équipe
+            </div>
+            <div class="settings-menu-item" data-section="notifications">
+                <i class="fas fa-bell"></i> Notifications
+            </div>
+            <div class="settings-menu-item" data-section="security">
+                <i class="fas fa-shield-alt"></i> Sécurité
+            </div>
+            <div class="settings-menu-item" data-section="preferences">
+                <i class="fas fa-sliders-h"></i> Préférences
+            </div>
+        </div>
+
+        <!-- CONTENU PARAMÈTRES -->
+        <div class="settings-content">
+            <!-- ENTREPRISE -->
+            <div class="settings-section active" data-section="company">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-building"></i> Informations entreprise</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="logo-upload-section">
+                            <div class="company-logo-preview">
+                                <img src="https://ui-avatars.com/api/?name=ABC+Entreprise&background=FF6B35&color=fff&size=120" alt="Logo">
+                            </div>
+                            <div class="logo-upload-info">
+                                <h4>Logo de l'entreprise</h4>
+                                <p>PNG, JPG - Max 2 MB</p>
+                                <button class="btn-outline btn-sm">
+                                    <i class="fas fa-upload"></i> Changer le logo
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nom de l'entreprise</label>
+                                <input type="text" value="ABC Entreprise Inc.">
+                            </div>
+                            <div class="form-group">
+                                <label>Numéro d'entreprise (NEQ)</label>
+                                <input type="text" value="1234567890">
+                            </div>
+                            <div class="form-group">
+                                <label>Numéro de TPS</label>
+                                <input type="text" value="123456789 RT0001">
+                            </div>
+                            <div class="form-group">
+                                <label>Numéro de TVQ</label>
+                                <input type="text" value="1234567890 TQ0001">
+                            </div>
+                            <div class="form-group">
+                                <label>Secteur d'activité</label>
+                                <select>
+                                    <option>E-commerce</option>
+                                    <option>Restauration</option>
+                                    <option>Pharmacie</option>
+                                    <option>Services professionnels</option>
+                                    <option>Autre</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Taille de l'entreprise</label>
+                                <select>
+                                    <option>1-10 employés</option>
+                                    <option>11-50 employés</option>
+                                    <option>51-200 employés</option>
+                                    <option>200+ employés</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Adresse de facturation</label>
+                                <input type="text" value="123 Rue Principale, Montréal, QC H1A 1A1">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-outline">Annuler</button>
+                            <button class="btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFIL -->
+            <div class="settings-section" data-section="profile">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-circle"></i> Profil utilisateur</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Prénom</label>
+                                <input type="text" value="Jean">
+                            </div>
+                            <div class="form-group">
+                                <label>Nom</label>
+                                <input type="text" value="Dupont">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="jean.dupont@abc-entreprise.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Téléphone</label>
+                                <input type="tel" value="+1 514 555-0123">
+                            </div>
+                            <div class="form-group">
+                                <label>Poste</label>
+                                <input type="text" value="Directeur des opérations">
+                            </div>
+                            <div class="form-group">
+                                <label>Langue</label>
+                                <select>
+                                    <option>Français</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-outline">Annuler</button>
+                            <button class="btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTIFICATIONS -->
+            <div class="settings-section" data-section="notifications">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bell"></i> Préférences de notification</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="notification-group">
+                            <h4>Par Email</h4>
+                            <div class="toggle-item">
+                                <div>
+                                    <strong>Nouvelle acceptation</strong>
+                                    <span>Quand un voyageur accepte votre envoi</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div>
+                                    <strong>Colis livré</strong>
+                                    <span>Quand un colis arrive à destination</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div>
+                                    <strong>Nouvelle facture</strong>
+                                    <span>Quand une nouvelle facture est émise</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div>
+                                    <strong>Newsletter</strong>
+                                    <span>Actualités et promotions ColisGo</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="notification-group">
+                            <h4>Par SMS</h4>
+                            <div class="toggle-item">
+                                <div>
+                                    <strong>Livraison urgente</strong>
+                                    <span>Alerte immédiate</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div>
+                                    <strong>Problème de livraison</strong>
+                                    <span>En cas d'incident</span>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SÉCURITÉ -->
+            <div class="settings-section" data-section="security">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-shield-alt"></i> Sécurité du compte</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="security-item">
+                            <div>
+                                <h4>Mot de passe</h4>
+                                <p>Dernière modification il y a 2 mois</p>
+                            </div>
+                            <button class="btn-outline btn-sm">Changer</button>
+                        </div>
+                        <div class="security-item">
+                            <div>
+                                <h4>Authentification à deux facteurs (2FA)</h4>
+                                <p class="status-active"><i class="fas fa-check-circle"></i> Activée</p>
+                            </div>
+                            <button class="btn-outline btn-sm">Gérer</button>
+                        </div>
+                        <div class="security-item">
+                            <div>
+                                <h4>Sessions actives</h4>
+                                <p>3 appareils connectés</p>
+                            </div>
+                            <button class="btn-outline btn-sm">Voir</button>
+                        </div>
+                        <div class="security-item danger">
+                            <div>
+                                <h4>Supprimer le compte</h4>
+                                <p>Cette action est irréversible</p>
+                            </div>
+                            <button class="btn-danger btn-sm">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÉQUIPE -->
+            <div class="settings-section" data-section="team">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Membres de l'équipe</h3>
+                        <button class="btn-primary btn-sm">
+                            <i class="fas fa-user-plus"></i> Inviter un membre
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="team-list">
+                            <div class="team-member">
+                                <img src="https://ui-avatars.com/api/?name=Jean+Dupont&background=FF6B35&color=fff" alt="">
+                                <div class="member-info">
+                                    <strong>Jean Dupont (Vous)</strong>
+                                    <span>jean.dupont@abc-entreprise.com</span>
+                                </div>
+                                <span class="role-badge admin">Admin</span>
+                            </div>
+                            <div class="team-member">
+                                <img src="https://ui-avatars.com/api/?name=Marie+Martin&background=3B82F6&color=fff" alt="">
+                                <div class="member-info">
+                                    <strong>Marie Martin</strong>
+                                    <span>marie.martin@abc-entreprise.com</span>
+                                </div>
+                                <span class="role-badge manager">Manager</span>
+                                <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                            <div class="team-member">
+                                <img src="https://ui-avatars.com/api/?name=Paul+Leblanc&background=10B981&color=fff" alt="">
+                                <div class="member-info">
+                                    <strong>Paul Leblanc</strong>
+                                    <span>paul.leblanc@abc-entreprise.com</span>
+                                </div>
+                                <span class="role-badge member">Membre</span>
+                                <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRÉFÉRENCES -->
+            <div class="settings-section" data-section="preferences">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-sliders-h"></i> Préférences</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Fuseau horaire</label>
+                                <select>
+                                    <option>Amérique/Montréal (UTC-5)</option>
+                                    <option>Amérique/Toronto (UTC-5)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Format de date</label>
+                                <select>
+                                    <option>DD/MM/YYYY</option>
+                                    <option>MM/DD/YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Devise</label>
+                                <select>
+                                    <option>CAD - Dollar canadien</option>
+                                    <option>USD - Dollar américain</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Thème</label>
+                                <select>
+                                    <option>Clair</option>
+                                    <option>Sombre</option>
+                                    <option>Auto</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-primary">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </main>
+    </div>
+
+    <!-- MODAL QR CODE -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content qr-modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-qrcode"></i> Scanner pour ajouter les photos</h2>
+                <button class="modal-close" onclick="closeQRModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="qr-container">
+                    <div class="qr-info-card">
+                        <div class="qr-shipment-info">
+                            <span class="qr-label">Envoi</span>
+                            <h3 id="qrShipmentId">#CG12345</h3>
+                            <div class="qr-route">
+                                <span id="qrSender">Montréal</span>
+                                <i class="fas fa-arrow-right"></i>
+                                <span id="qrReceiver">Québec</span>
+                            </div>
+                        </div>
+                        
+                        <div class="qr-code-wrapper">
+                            <canvas id="qrCanvas"></canvas>
+                        </div>
+                        
+                        <div class="qr-instructions">
+                            <p><strong>📱 Comment ça marche ?</strong></p>
+                            <ol>
+                                <li>Ouvrez l'appareil photo de votre téléphone</li>
+                                <li>Scannez le QR code ci-dessus</li>
+                                <li>Prenez des photos du colis</li>
+                                <li>Les photos seront ajoutées automatiquement</li>
+                            </ol>
+                        </div>
+
+                        <div class="qr-url-box">
+                            <span class="qr-url-label">Ou partagez ce lien :</span>
+                            <div class="qr-url-value">
+                                <code id="qrUrl">https://colisgo.ca/upload/abc123xyz</code>
+                                <button class="btn-icon" onclick="copyQRUrl()" title="Copier">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qr-status-card">
+                        <div class="qr-status-header">
+                            <h4><i class="fas fa-images"></i> Photos reçues</h4>
+                            <span class="qr-counter">
+                                <span id="photoCount">0</span> / 4
+                            </span>
+                        </div>
+                        
+                        <div class="qr-photos-grid" id="photosGrid">
+                            <div class="qr-photo-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <span>En attente...</span>
+                            </div>
+                            <div class="qr-photo-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <span>En attente...</span>
+                            </div>
+                            <div class="qr-photo-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <span>En attente...</span>
+                            </div>
+                            <div class="qr-photo-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <span>En attente...</span>
+                            </div>
+                        </div>
+
+                        <div class="qr-status-indicator" id="qrStatus">
+                            <div class="status-pulse"></div>
+                            <span>En attente des photos...</span>
+                        </div>
+
+                        <div class="qr-tips">
+                            <h5>💡 Conseils pour de bonnes photos :</h5>
+                            <ul>
+                                <li>✓ Photo claire sous bon éclairage</li>
+                                <li>✓ Montrer le colis sous plusieurs angles</li>
+                                <li>✓ Inclure l'étiquette d'expédition</li>
+                                <li>✓ Montrer l'état général du colis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="printQRCode()">
+                    <i class="fas fa-print"></i> Imprimer le QR
+                </button>
+                <button class="btn-outline" onclick="downloadQRCode()">
+                    <i class="fas fa-download"></i> Télécharger
+                </button>
+                <button class="btn-primary" onclick="simulatePhotoUpload()">
+                    <i class="fas fa-camera"></i> Simuler upload (démo)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOUVEL ENVOI AVEC WORKFLOW -->
+<div class="modal" id="shipmentModal">
+    <div class="modal-content shipment-modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-paper-plane"></i> Créer un nouvel envoi</h2>
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- WORKFLOW STEPS -->
+        <div class="workflow-container">
+            <div class="workflow-step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-info">
+                    <span class="step-title">Infos colis</span>
+                    <span class="step-desc">Expéditeur & destinataire</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-info">
+                    <span class="step-title">Photos</span>
+                    <span class="step-desc">Upload ou QR code</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-info">
+                    <span class="step-title">Livraison</span>
+                    <span class="step-desc">Mode & options</span>
+                </div>
+            </div>
+            <div class="workflow-connector"></div>
+            <div class="workflow-step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-info">
+                    <span class="step-title">Publication</span>
+                    <span class="step-desc">Voyageur accepte</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <!-- ÉTAPE 1 : INFOS COLIS -->
+            <div class="step-content active" data-step="1">
+                <h3 class="step-heading">📍 Informations de l'envoi</h3>
+                
+                <div class="form-section">
+                    <h4><i class="fas fa-map-marker-alt"></i> Adresses</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Adresse de départ *</label>
+                            <input type="text" placeholder="Ex: 123 Rue Principale, Montréal, QC" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Adresse d'arrivée *</label>
+                            <input type="text" placeholder="Ex: 456 Rue Saint-Jean, Québec, QC" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4><i class="fas fa-user"></i> Destinataire</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nom complet *</label>
+                            <input type="text" placeholder="Jean Tremblay" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" placeholder="jean.tremblay@email.com" required>
+                            <small class="form-hint">
+                                <i class="fas fa-info-circle"></i> 
+                                Si le destinataire a un compte ColisGo, il pourra suivre le colis et choisir le mode de livraison
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label>Téléphone *</label>
+                            <input type="tel" placeholder="+1 514 555-0123" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mode de notification</label>
+                            <select>
+                                <option>Email + SMS</option>
+                                <option>Email seulement</option>
+                                <option>SMS seulement</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4><i class="fas fa-box"></i> Détails du colis</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Type de colis *</label>
+                            <select required>
+                                <option value="">Sélectionner...</option>
+                                <option>📄 Documents</option>
+                                <option>📦 Petit (< 2kg)</option>
+                                <option>📦 Moyen (2-5kg)</option>
+                                <option>📦 Grand (5-15kg)</option>
+                                <option>🧊 Fragile</option>
+                                <option>🌡️ Température contrôlée</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Poids (kg)</label>
+                            <input type="number" step="0.1" placeholder="1.5">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Description du contenu</label>
+                            <textarea placeholder="Ex: Documents commerciaux importants..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <span></span>
+                    <button class="btn-primary" onclick="nextStep()">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ÉTAPE 2 : PHOTOS -->
+            <div class="step-content" data-step="2">
+                <h3 class="step-heading">📸 Photos du colis</h3>
+                <p class="step-description">Ajoutez des photos claires de votre colis pour que les voyageurs sachent ce qu'ils vont transporter</p>
+                
+                <div class="photo-options">
+                    <!-- Option 1: Upload direct -->
+                    <div class="photo-option-card">
+                        <div class="photo-option-icon bg-blue">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h4>Upload depuis l'ordinateur</h4>
+                        <p>Glissez-déposez ou cliquez pour sélectionner</p>
+                        
+                        <div class="upload-zone" onclick="document.getElementById('photoInput').click()">
+                            <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotoUpload(this)" hidden>
+                            <i class="fas fa-image"></i>
+                            <span>Cliquez ou glissez vos photos ici</span>
+                            <small>JPG, PNG, WebP - Max 10 MB par photo</small>
+                        </div>
+                    </div>
+
+                    <div class="photo-option-divider">
+                        <span>OU</span>
+                    </div>
+
+                    <!-- Option 2: QR Code -->
+                    <div class="photo-option-card">
+                        <div class="photo-option-icon bg-orange">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h4>Scanner avec téléphone</h4>
+                        <p>Scannez le QR code et prenez des photos</p>
+                        
+                        <button class="btn-primary btn-full" onclick="openQRFromForm()">
+                            <i class="fas fa-qrcode"></i> Générer QR Code
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QR Code section -->
+                <div class="qr-form-section" id="qrFormSection">
+                    <div class="qr-form-content">
+                        <canvas id="qrFormCanvas"></canvas>
+                        <div class="qr-form-info">
+                            <h4>📱 Comment faire ?</h4>
+                            <ol>
+                                <li>Ouvrez l'appareil photo de votre téléphone</li>
+                                <li>Scannez le QR code à gauche</li>
+                                <li>Prenez des photos du colis</li>
+                                <li>Elles seront ajoutées automatiquement</li>
+                            </ol>
+                            <div class="qr-form-url">
+                                <code id="qrFormUrl">https://colisgo.ca/upload/...</code>
+                                <button class="btn-icon" onclick="copyFormQRUrl()">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo previews -->
+                <div class="photo-preview-section">
+                    <div class="photo-preview-header">
+                        <h4>Photos ajoutées (<span id="photoCounter">0</span>)</h4>
+                    </div>
+                    <div class="photo-preview-grid" id="photoPreview"></div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn-primary" onclick="nextStep()">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ÉTAPE 3 : OPTIONS DE LIVRAISON -->
+            <div class="step-content" data-step="3">
+                <h3 class="step-heading">🚚 Mode de livraison</h3>
+                <p class="step-description">Choisissez comment le colis sera remis au destinataire</p>
+                
+                <div class="delivery-modes">
+                    <label class="delivery-mode-card">
+                        <input type="radio" name="deliveryMode" value="avec-contact" checked>
+                        <div class="delivery-mode-content">
+                            <div class="delivery-mode-icon bg-green">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h4>Avec contact</h4>
+                            <p>Remise en main propre avec signature</p>
+                            <ul>
+                                <li>✓ Signature électronique</li>
+                                <li>✓ Vérification d'identité</li>
+                                <li>✓ Preuve de livraison</li>
+                            </ul>
+                        </div>
+                    </label>
+
+                    <label class="delivery-mode-card">
+                        <input type="radio" name="deliveryMode" value="sans-contact">
+                        <div class="delivery-mode-content">
+                            <div class="delivery-mode-icon bg-blue">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <h4>Sans contact</h4>
+                            <p>Dépôt à un endroit convenu</p>
+                            <ul>
+                                <li>✓ Photo de livraison</li>
+                                <li>✓ Confirmation par SMS</li>
+                                <li>✓ Code de dépôt sécurisé</li>
+                            </ul>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-section">
+                    <h4><i class="fas fa-calendar-alt"></i> Délai et prix</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Date limite de livraison</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group">
+                            <label>Prix proposé ($)</label>
+                            <input type="number" step="0.50" placeholder="18.00">
+                            <small class="form-hint">
+                                <i class="fas fa-lightbulb"></i>
+                                Prix suggéré pour ce trajet : 15$ - 22$
+                            </small>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Instructions spéciales</label>
+                            <textarea placeholder="Ex: Sonnez 2 fois, laissez au voisin si absent..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn-primary" onclick="nextStep()">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ÉTAPE 4 : PUBLICATION -->
+            <div class="step-content" data-step="4">
+                <h3 class="step-heading">🚀 Publication de l'annonce</h3>
+                <p class="step-description">Votre annonce sera visible par les voyageurs qui se dirigent vers cette destination</p>
+                
+                <div class="publication-summary">
+                    <h4><i class="fas fa-clipboard-check"></i> Récapitulatif</h4>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-label">Trajet</span>
+                            <strong>Montréal → Québec</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Destinataire</span>
+                            <strong>Jean Tremblay</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Type</span>
+                            <strong>📦 Moyen (2-5kg)</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Mode</span>
+                            <strong>🤝 Avec contact</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Prix</span>
+                            <strong>18.00$</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Photos</span>
+                            <strong>4 photos ✓</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="publication-options">
+                    <h4><i class="fas fa-rocket"></i> Options de publication</h4>
+                    
+                    <label class="publication-option">
+                        <input type="radio" name="publishMode" value="standard" checked>
+                        <div class="publication-option-content">
+                            <strong>📢 Publication standard</strong>
+                            <span>Visible par tous les voyageurs (gratuit)</span>
+                        </div>
+                        <span class="price-tag">Inclus</span>
+                    </label>
+
+                    <label class="publication-option">
+                        <input type="radio" name="publishMode" value="boosted">
+                        <div class="publication-option-content">
+                            <strong>⚡ Publication boostée</strong>
+                            <span>Mise en avant + notification push aux voyageurs</span>
+                        </div>
+                        <span class="price-tag">+3.00$</span>
+                    </label>
+
+                    <label class="publication-option">
+                        <input type="radio" name="publishMode" value="urgent">
+                        <div class="publication-option-content">
+                            <strong>🔥 Urgent</strong>
+                            <span>Priorité maximale, SMS aux voyageurs disponibles</span>
+                        </div>
+                        <span class="price-tag">+8.00$</span>
+                    </label>
+                </div>
+
+                <div class="publication-info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Que se passe-t-il ensuite ?</strong>
+                        <p>Votre annonce sera publiée sur la plateforme ColisGo. Les voyageurs en déplacement vers cette destination la verront et pourront l'accepter. Vous serez notifié dès qu'un voyageur accepte !</p>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-outline" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button class="btn-primary btn-large" onclick="submitShipment()">
+                        <i class="fas fa-rocket"></i> Publier l'annonce
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div></div>
+
+    <script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
