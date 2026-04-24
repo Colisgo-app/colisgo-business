@@ -66,11 +66,15 @@ async function apiCall(endpoint, options = {}) {
         
         // Gestion des erreurs HTTP
         if (!response.ok) {
-            // Si token expiré, essayer de le rafraîchir
-            if (response.status === 401 && TokenManager.getRefreshToken()) {
+            const authErrorMessage = String(data.message || data.error || '').toLowerCase();
+            const shouldRefreshToken =
+                (response.status === 401 || response.status === 403) &&
+                TokenManager.getRefreshToken() &&
+                (response.status === 401 || authErrorMessage.includes('invalid token') || authErrorMessage.includes('token invalide'));
+
+            if (shouldRefreshToken) {
                 const refreshed = await refreshAccessToken();
                 if (refreshed) {
-                    // Retry la requête avec le nouveau token
                     return apiCall(endpoint, options);
                 }
             }
